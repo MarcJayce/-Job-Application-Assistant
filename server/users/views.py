@@ -1,7 +1,7 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
-from .Services.firebase_service import create_firebase_user
+from .Services.firebase_create import create_firebase_user
 
 @csrf_exempt  # Disable CSRF for simplicity (use proper tokens in production)
 def firebase_signup_view(request):
@@ -15,10 +15,15 @@ def firebase_signup_view(request):
                 return JsonResponse({"error": "Email and password required"}, status=400)
 
             user = create_firebase_user(email, password)
+
+            # Profile auto-created via signal, but you can fetch it:
+            profile = user.profile  
+
             return JsonResponse({
                 "id": user.id,
                 "email": user.email,
-                "firebase_uid": user.firebase_uid
+                "firebase_uid": user.firebase_uid,
+                "profile_id": profile.id
             }, status=201)
 
         except Exception as e:

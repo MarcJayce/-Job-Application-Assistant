@@ -16,10 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Profile.views import update_profile
 from users.views import firebase_signup_view
+from Resume.views import upload_resume
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("signup/", firebase_signup_view, name="firebase-signup"),
-
+    path("profile/", update_profile, name="update-profile"),
+    path("resume/", upload_resume, name="upload-resume"),
 ]
